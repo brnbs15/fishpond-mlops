@@ -1,0 +1,33 @@
+[project]
+name = "fishpond"
+version = "0.1.0"
+description = "MLOps pipeline predicting average catfish weight from aquaponics pond sensor data"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+authors = [{ name = "Molnár Barnabás" }]
+
+[tool.pyright]
+include = ["src"]
+typeCheckingMode = "strict"
+reportMissingTypeStubs = false
+reportUnknownMemberType = false
+reportUnknownArgumentType = false
+reportUnknownVariableType = false
+pythonVersion = "3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::FutureWarning",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["src", "tests"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 95

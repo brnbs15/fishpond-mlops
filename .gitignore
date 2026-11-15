@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Test / coverage output
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Tooling caches
+.mypy_cache/
+.ruff_cache/
+.pyright/
+
+# Data is versioned with DVC, not git
+/data/raw/*.csv
+/data/processed/*.csv
+
+# Runtime state created by docker compose / local runs
+/mlruns/
+/mlartifacts/
+/runtime/
+mlflow.db
+*.log
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

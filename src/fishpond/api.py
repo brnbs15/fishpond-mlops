@@ -159,7 +159,12 @@ def startup(state: AppState) -> None:
         return
     if state.settings.auto_train_on_startup:
         logger.info("Auto training the first model")
-        result = state.trainer(state.load_data(), state.settings, False, None, 0.0)
+        try:
+            frame = state.load_data()
+        except FileNotFoundError as error:  # fresh clone without `dvc pull`: stay up, /train explains it
+            logger.error("Cannot auto train: %s", error)
+            return
+        result = state.trainer(frame, state.settings, False, None, 0.0)
         if result.promoted:
             state.service.reload()
 

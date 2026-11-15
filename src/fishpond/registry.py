@@ -66,7 +66,10 @@ def register_version(client: MlflowClient, model_uri: str, model_name: str, tags
 
 
 def promote(client: MlflowClient, model_name: str, version: str, alias: str) -> None:
-    """Move the alias to the given version and mark the version as champion."""
+    """Move the alias to the given version, mark it as champion and the previous champion as superseded."""
+    previous = get_champion_version(client, model_name, alias)
+    if previous is not None and str(previous.version) != str(version):
+        client.set_model_version_tag(model_name, str(previous.version), "status", "superseded")
     client.set_registered_model_alias(model_name, alias, version)
     client.set_model_version_tag(model_name, version, "status", "champion")
 

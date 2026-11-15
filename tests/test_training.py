@@ -74,3 +74,17 @@ def test_main_trains_from_processed_file(
     )
     assert result.promoted is True
     assert result.metrics["rmse"] > 0
+
+
+def test_promotion_marks_previous_champion_as_superseded(
+    clean_frame: pd.DataFrame, mlflow_settings: Settings
+) -> None:
+    client = MlflowClient(tracking_uri=mlflow_settings.mlflow_tracking_uri)
+    training.train_and_register(clean_frame, mlflow_settings, candidate_names=["ridge"])
+    better = training.train_and_register(clean_frame, mlflow_settings, candidate_names=["random_forest"])
+    assert better.promoted is True
+    assert client.get_model_version(mlflow_settings.model_name, "1").tags["status"] == "superseded"
+    assert client.get_model_version(mlflow_settings.model_name, "2").tags["status"] == "champion"
+    # re-promoting the current champion keeps its status
+    registry.promote(client, mlflow_settings.model_name, "2", mlflow_settings.champion_alias)
+    assert client.get_model_version(mlflow_settings.model_name, "2").tags["status"] == "champion"

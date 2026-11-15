@@ -14,6 +14,8 @@ reportUnknownMemberType = false
 reportUnknownArgumentType = false
 reportUnknownVariableType = false
 pythonVersion = "3.11"
+venvPath = "."
+venv = ".venv"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -31,3 +33,10 @@ source = ["src", "tests"]
 [tool.coverage.report]
 show_missing = true
 fail_under = 95
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

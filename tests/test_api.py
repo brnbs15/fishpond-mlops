@@ -179,3 +179,16 @@ def test_default_trainer_and_disabled_mlflow_prediction_logging(state: api.AppSt
     experiment = state.client.get_experiment_by_name(state.settings.prediction_experiment_name)
     assert experiment is not None
     assert state.client.search_runs([experiment.experiment_id]) == []
+
+
+def test_auto_train_without_data_keeps_api_running(state: api.AppState) -> None:
+    def missing() -> pd.DataFrame:
+        raise FileNotFoundError("run 'dvc pull' first")
+
+    state.settings = dataclasses.replace(state.settings, auto_train_on_startup=True)
+    state.load_data = missing
+    with TestClient(api.create_app(state)) as test_client:
+        assert test_client.get("/health").json()["model_loaded"] is False
+        response = test_client.post("/train", json={})
+        assert response.status_code == 503
+        assert "dvc pull" in response.json()["detail"]

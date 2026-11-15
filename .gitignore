@@ -33,3 +33,6 @@ mlflow.db
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Moodle submission bundle (PDF + processed dataset), not part of the repository
+/beadas/

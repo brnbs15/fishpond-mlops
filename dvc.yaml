@@ -1,0 +1,9 @@
+stages:
+  preprocess:
+    cmd: python -m fishpond.data --input data/raw/fish_pond_sample.csv --output data/processed/fish_pond_clean.csv
+    deps:
+      - src/fishpond/data.py
+      - src/fishpond/config.py
+      - data/raw/fish_pond_sample.csv
+    outs:
+      - data/processed/fish_pond_clean.csv

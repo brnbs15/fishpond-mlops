@@ -1,0 +1,23 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python -m fishpond.data --input data/raw/fish_pond_sample.csv --output 
+      data/processed/fish_pond_clean.csv
+    deps:
+    - path: data/raw/fish_pond_sample.csv
+      hash: md5
+      md5: 4933bd32c5f7c8bd1c8a060a41f746d8
+      size: 435431
+    - path: src/fishpond/config.py
+      hash: md5
+      md5: f4a8b097c5034560717dc03f19dc2b6c
+      size: 3153
+    - path: src/fishpond/data.py
+      hash: md5
+      md5: 5c5b2b379ea4359df6887bf1d0984e71
+      size: 5683
+    outs:
+    - path: data/processed/fish_pond_clean.csv
+      hash: md5
+      md5: 93afe81af45ab144d97986107b6ca38a
+      size: 419741

@@ -10,6 +10,7 @@ x-fishpond-env: &fishpond-env
   FISHPOND_RAW_DATA: /app/data/raw/fish_pond_sample.csv
   FISHPOND_PROCESSED_DATA: /app/data/processed/fish_pond_clean.csv
   FISHPOND_PREDICTION_LOG: /app/runtime/predictions.csv
+  GIT_PYTHON_REFRESH: quiet  # no git inside the containers; silences the MLflow warning
 
 services:
   mlflow:
@@ -35,8 +36,8 @@ services:
     restart: unless-stopped
 
   api:
-    build: .
     image: fishpond:latest
+    pull_policy: never  # built once by the mlflow service
     depends_on:
       mlflow:
         condition: service_healthy
@@ -57,8 +58,8 @@ services:
     restart: unless-stopped
 
   streamlit:
-    build: .
     image: fishpond:latest
+    pull_policy: never  # built once by the mlflow service
     depends_on:
       api:
         condition: service_healthy

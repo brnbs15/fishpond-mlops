@@ -53,6 +53,11 @@ def load_raw(path: Path) -> pd.DataFrame:
     return frame
 
 
+def _to_float(frame: pd.DataFrame, column: str) -> pd.Series:
+    """Numeric conversion of a column; unparsable values become NaN."""
+    return pd.Series(pd.to_numeric(frame[column], errors="coerce"), index=frame.index, dtype="float64")
+
+
 def sanitize_values(frame: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, int]]:
     """Coerce numeric columns, turn infinities and out-of-range readings into NaN.
 
@@ -63,8 +68,7 @@ def sanitize_values(frame: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, int]]:
     for column, (low, high) in VALID_RANGES.items():
         if column not in result.columns:
             continue
-        values = pd.to_numeric(result[column], errors="coerce").astype(float)
-        values = values.replace([np.inf, -np.inf], np.nan)
+        values = _to_float(result, column).replace([np.inf, -np.inf], np.nan)
         before = int(values.isna().sum())
         values = values.where((values >= low) & (values <= high))
         invalidated[column] = int(values.isna().sum()) - before
@@ -90,7 +94,7 @@ def clean_dataset(frame: pd.DataFrame) -> tuple[pd.DataFrame, CleaningReport]:
 
     data, invalidated = sanitize_values(data)
 
-    target = pd.to_numeric(data[TARGET], errors="coerce")
+    target = _to_float(data, TARGET)
     valid_target = target.notna() & (target > 0) & np.isfinite(target)
     invalid_targets = int((~valid_target).sum())
     data = data.loc[valid_target]

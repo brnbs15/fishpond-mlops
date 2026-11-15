@@ -17,7 +17,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from fishpond import monitoring
 from fishpond.config import Settings, get_settings
-from fishpond.data import load_processed
+from fishpond.data import ensure_processed
 from fishpond.prediction_log import PredictionLogger, RequestLogger
 from fishpond.service import ModelNotAvailableError, ModelService, track_prediction
 from fishpond.training import TrainingResult, train_and_register
@@ -142,7 +142,7 @@ def build_state(settings: Settings) -> AppState:
         predictions=PredictionLogger(settings.prediction_log_path),
         requests=RequestLogger(log_dir / "requests.jsonl"),
         trainer=_default_trainer,
-        load_data=lambda: load_processed(settings.processed_data_path),
+        load_data=lambda: ensure_processed(settings.raw_data_path, settings.processed_data_path),
         client=client,
     )
 

@@ -130,6 +130,20 @@ def load_processed(path: Path) -> pd.DataFrame:
     return frame
 
 
+def ensure_processed(raw_path: Path, processed_path: Path) -> pd.DataFrame:
+    """Processed dataset; it is (re)built from the raw file when only the raw file is available.
+
+    Normally ``dvc repro`` / ``dvc pull`` provides the processed file, this is a fallback for fresh containers.
+    """
+    if not processed_path.exists():
+        if not raw_path.exists():
+            raise FileNotFoundError(f"Neither {processed_path} nor {raw_path} exists; run 'dvc pull' first")
+        cleaned, report = clean_dataset(load_raw(raw_path))
+        save_processed(cleaned, processed_path)
+        logger.info("Processed dataset rebuilt from %s (%d rows)", raw_path, report.rows_out)
+    return load_processed(processed_path)
+
+
 def sensor_columns() -> list[str]:
     """Names of the water quality sensor columns (handy for monitoring)."""
     return list(SENSOR_COLUMNS)

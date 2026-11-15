@@ -1,0 +1,17 @@
+.git
+.github
+.venv
+.dvc/cache
+.dvc/tmp
+.pytest_cache
+.coverage
+htmlcov
+**/__pycache__
+runtime
+mlruns
+mlartifacts
+data
+docs
+screenshots
+airflow
+tests

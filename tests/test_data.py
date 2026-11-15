@@ -82,3 +82,17 @@ def test_main_writes_processed_file(tmp_path: Path, raw_csv: Path) -> None:
 def test_sensor_columns_lists_water_quality_fields() -> None:
     assert "dissolved_oxygen" in data.sensor_columns()
     assert TARGET not in data.sensor_columns()
+
+
+def test_ensure_processed_builds_missing_file_once(tmp_path: Path, raw_csv: Path) -> None:
+    processed = tmp_path / "processed" / "clean.csv"
+    first = data.ensure_processed(raw_csv, processed)
+    assert processed.exists()
+    raw_csv.unlink()
+    second = data.ensure_processed(raw_csv, processed)
+    assert len(first) == len(second)
+
+
+def test_ensure_processed_without_any_data(tmp_path: Path) -> None:
+    with pytest.raises(FileNotFoundError, match="dvc pull"):
+        data.ensure_processed(tmp_path / "raw.csv", tmp_path / "clean.csv")

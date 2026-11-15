@@ -1,0 +1,5 @@
+outs:
+- md5: 4933bd32c5f7c8bd1c8a060a41f746d8
+  size: 435431
+  hash: md5
+  path: fish_pond_sample.csv

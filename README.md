@@ -229,7 +229,7 @@ python -m fishpond.training        # tanítás lokálisan (MLFLOW_TRACKING_URI k
 
 | Ellenőrzés | Eredmény |
 |---|---|
-| pytest | 61 teszt, mind sikeres |
+| pytest | 62 teszt, mind sikeres |
 | coverage (`src/` + `tests/`, branch coverage is) | **100%** |
 | flake8 (teljes repo) | 0 hiba |
 | pyright strict, `src/` | 0 hiba, 0 figyelmeztetés |
@@ -275,7 +275,7 @@ A futtatásról készült képek a [`docs/screenshots`](docs/screenshots) mappá
 | `10_streamlit_registry.png` | Streamlit dashboard – registry áttekintés, predikciók verziónként |
 | `11_streamlit_evidently.png` | Streamlit dashboard – beágyazott Evidently drift riport (szimulált „hőhullám” drift) |
 | `12_airflow_dag.png` | Airflow – a `fishpond_drift_retraining` DAG sikeres futásai |
-| `13_pytest_coverage.png` | 61 teszt, 100% coverage, flake8 0 hiba, pyright strict 0 hiba |
+| `13_pytest_coverage.png` | tesztek (a kép készítésekor 61 db), 100% coverage, flake8 0 hiba, pyright strict 0 hiba |
 
 A böngészős képek Playwright-tal készültek a futó rendszerről; a terminálos képek (01, 09, 13) a valódi
 parancskimenetek renderelt képei.
